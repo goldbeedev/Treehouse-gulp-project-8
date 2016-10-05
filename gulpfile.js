@@ -10,23 +10,20 @@ var gulp = require('gulp'),
      del = require('del'),
 imagemin = require('gulp-imagemin'),
 webserver = require('gulp-connect'),
-runSequence = require('run-sequence');
+runSequence = require('run-sequence'),
+cssmin = require('gulp-clean-css');
 
-var options = {
-  src: 'src',
-  dist: 'dist'
 
-};
+
 
 //concat the scripts
 gulp.task("concatScripts", function() {
     return gulp.src([
-        'js/global.js',
         'js/circle/autogrow.js',
         'js/circle/circle.js'
         ])
     .pipe(maps.init())
-    .pipe(concat('app.js'))
+    .pipe(concat('global.js'))
     .pipe(maps.write('./'))
     .pipe(gulp.dest('js'));
 });
@@ -38,16 +35,27 @@ gulp.task("scripts", ["concatScripts"], function() {
     .pipe(uglify())
     .pipe(rename('all.min.js'))
     .pipe(maps.write('./'))
-    .pipe(gulp.dest(options.dist + '/scripts'));
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(webserver.reload());
 });
 
-//minify the css 
-gulp.task('styles', function() {
-  return gulp.src(["sass/**.scss"])
+//compile sass
+gulp.task('compileSass', function() {
+  return gulp.src("sass/global.scss")
     .pipe(maps.init())
     .pipe(sass())
     .pipe(maps.write('./'))
-    .pipe(gulp.dest(options.dist + '/styles'))
+    .pipe(gulp.dest('css'));
+
+
+});
+
+//minify the css
+gulp.task('styles', ['compileSass'], function(){
+    return gulp.src('css/global.css')
+      .pipe(cssmin())
+      .pipe(rename('all.min.css'))
+      .pipe(gulp.dest('dist/styles'));
 
 
 });
