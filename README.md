@@ -16,7 +16,7 @@ Clone or download - https://github.com/goldbeedev/Treehouse-gulp-project-8.git
 -From bash or shell "npm install"
 
 ## Usage
-* From bash or shell:
+* From bash or shell in the local project directory (commands):
   * "gulp" - default run task that runs all of the tasks in order (including build and clean before the build).
   * "gulp clean" - clears out the files created by the task automation (saved in the 'dist' folder).
   * "gulp serve" - automation script runs, files are compiled and served on a local server (localhost:8080) for deployment, any changes are livereloaded using the livereload gulp module.
